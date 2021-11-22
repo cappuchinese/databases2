@@ -30,7 +30,7 @@ def tentamen_args():
 
 def dbcon_args():
     """
-    Parse terminal commands for DatabaseConnector
+    Parse terminal commands for DatabaseConnector module
     :return:
     """
     parser = argparse.ArgumentParser()
@@ -41,7 +41,9 @@ def dbcon_args():
                         help="Password of the user")
     args = parser.parse_args()
 
+    # Hidden password
     if args.password:
         args.password = getpass("Enter password: ")
 
+    # Return user given variables
     return args

@@ -24,23 +24,23 @@ class DatabaseConnector:
     """
 
     def __init__(self):
-        self.args = argsparser.dbcon_args()
-        if len(sys.argv) < 4:
+        self.args = argsparser.dbcon_args()  # Execute the argsparser
+        if len(sys.argv) < 6:  # Check if there are enough arguments
             print("Insufficient arguments to connect to database, "
                   "my.cnf file will be used for login instead")
             self.cnf_check = True
 
-        self.conn, self.cur = self.connect()
+        self.conn, self.cur = self._connect()
 
-    def connect(self):
+    def _connect(self):
         """
         Connection method
         :return:
         """
         try:
-            if self.cnf_check:
+            if self.cnf_check:  # If there are not enough arguments, use my.cnf file for connection
                 connector = mariadb.connect(default_file="my.cnf")
-            else:
+            else:  # Connect with terminal commands
                 connector = mariadb.connect(host=self.args.host, user=self.args.user,
                                             passwd=self.args.password, db=self.args.database)
             cursor = connector.cursor()
@@ -74,6 +74,7 @@ class DatabaseConnector:
         self.cur.execute(query)  # Execute the query
         records = self.cur.fetchall()  # Fetch the data
         objects = [Tentamen(*record) for record in records]  # Put records in a list
+
         return objects
 
 
