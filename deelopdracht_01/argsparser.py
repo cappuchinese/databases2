@@ -34,7 +34,7 @@ def dbcon_args():
     :return:
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument("-h", "--host", metavar="H", help="Host of database")
+    parser.add_argument("-H", "--host", metavar="H", help="Host of database")
     parser.add_argument("-u", "--user", metavar="U", help="Name of the user")
     parser.add_argument("-d", "--database", metavar="D", help="Name of database")
     parser.add_argument("-p", "--password", action="store_true", dest="password",
@@ -42,6 +42,6 @@ def dbcon_args():
     args = parser.parse_args()
 
     if args.password:
-        password = getpass("Enter password: ")
+        args.password = getpass("Enter password: ")
 
-    return args, password
+    return args

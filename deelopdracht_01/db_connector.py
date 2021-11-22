@@ -24,8 +24,8 @@ class DatabaseConnector:
     """
 
     def __init__(self):
-        self.args, self.passwd = argsparser.dbcon_args()
-        if len(self.args) < 4:
+        self.args = argsparser.dbcon_args()
+        if len(sys.argv) < 4:
             print("Insufficient arguments to connect to database, "
                   "my.cnf file will be used for login instead")
             self.cnf_check = True
@@ -42,9 +42,10 @@ class DatabaseConnector:
                 connector = mariadb.connect(default_file="my.cnf")
             else:
                 connector = mariadb.connect(host=self.args.host, user=self.args.user,
-                                            passwd=self.passwd, db=self.args.database)
+                                            passwd=self.args.password, db=self.args.database)
             cursor = connector.cursor()
 
+            print("Connected to database")
             return connector, cursor
 
         except mariadb.Error as err:
@@ -69,7 +70,7 @@ class DatabaseConnector:
         """
         query = "SELECT s.naam, c.naam, e.ex_datum, e.cijfer FROM examens e " \
                 "JOIN studenten s ON s.stud_id = e.stud_id " \
-                "JOIN cursussen c on e.cur_id = c.cur_id;"  # Set the query
+                "JOIN cursussen c ON e.cur_id = c.cur_id;"  # Set the query
         self.cur.execute(query)  # Execute the query
         records = self.cur.fetchall()  # Fetch the data
         objects = [Tentamen(*record) for record in records]  # Put records in a list
