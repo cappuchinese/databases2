@@ -1,4 +1,4 @@
-#Databases 2: Deelopdracht 01
+# Databases 2: Deelopdracht 01
 
 Author: Lisa Hu<br>
 Date: November 2021<br>
@@ -18,21 +18,21 @@ using the **my.cnf** file. Besides connecting to the database, there are two mor
 which can be called upon initializing the class.<br>
 **argsparser.py** contains modules to parse the terminal commands for mentioned classes.
 
-###Tentamen.py
+### Tentamen.py
 A class that takes a student and its results as arguments. This module can be initialized in both 
 a script and as terminal command.<br>Printing the class will return the given arguments in the console.
 Usage:<br>
     As import: `Tentamen(<student_name>, <course>, <date>, <grade>)`<br>
     In terminal: `python3 Tentamen.py -s <student_name> -c <course> -d <date> -g <grade>`
 
-###db_connector.py
+### db_connector.py
 A class that connects the user to the database. 
 Also contains methods to get the list of students and a list of results.
 Usage:
     `python3 db_connector.py -h <host> -u <user> -d <database> -p`
     If there are insufficient arguments given, the **my.cnf** file will be used by default.
 
-###my.cnf
+### my.cnf
 An option file. MariaDB can use this file as a login input to connect to the database.
 To use this file, change everything between the arrow brackets (`<>`) to your personal login 
 credentials respectively.
