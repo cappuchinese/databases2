@@ -15,13 +15,13 @@ def tentamen_args():
     :return:
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument("-s", "--student_name", type=str, metavar="S", required=True,
+    parser.add_argument("-s", "--student_name", type=str, metavar="", required=True,
                         help="The name of the student")
-    parser.add_argument("-c", "--course", type=str, metavar="C", required=True,
+    parser.add_argument("-c", "--course", type=str, metavar="", required=True,
                         help="The name of the course")
-    parser.add_argument("-d", "--date", type=str, metavar="D", required=True,
+    parser.add_argument("-d", "--date", type=str, metavar="", required=True,
                         help="The date the exam was taken")
-    parser.add_argument("-g", "--grade", type=float, metavar="G", required=True,
+    parser.add_argument("-g", "--grade", type=float, metavar="", required=True,
                         help="The grade the student was given")
 
     # Return user given variables
@@ -34,11 +34,11 @@ def dbcon_args():
     :return:
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument("-H", "--host", metavar="H", help="Host of database")
-    parser.add_argument("-u", "--user", metavar="U", help="Name of the user")
-    parser.add_argument("-d", "--database", metavar="D", help="Name of database")
+    parser.add_argument("-H", "--host", metavar="", type=str, help="Host of database")
+    parser.add_argument("-u", "--user", metavar="", type=str, help="Name of the user")
+    parser.add_argument("-d", "--database", metavar="", type=str, help="Name of database")
     parser.add_argument("-p", "--password", action="store_true", dest="password",
-                        help="Password of the user")
+                        help="Password of the user. OPTION ARGUMENT, NEW COMMAND PROMPT WILL OPEN.")
     args = parser.parse_args()
 
     # Hidden password

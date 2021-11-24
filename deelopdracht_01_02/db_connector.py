@@ -73,8 +73,8 @@ class DatabaseConnector:
             query = "SELECT s.naam, c.naam, e.ex_datum, e.cijfer FROM examens e " \
                     "JOIN studenten s ON s.stud_id = e.stud_id " \
                     "JOIN cursussen c ON e.cur_id = c.cur_id " \
-                    f"WHERE s.naam = {student};"  # Set the query
-            self.cur.execute(query)  # Execute the query
+                    "WHERE s.naam = %s;"  # Set the query
+            self.cur.execute(query, (student,))  # Execute the query
             records = self.cur.fetchall()  # Fetch the data
             objects = [Tentamen(*record) for record in records]  # Put records in a list
         except mariadb.OperationalError:

@@ -2,7 +2,17 @@
 
 Author: Lisa Hu<br>
 Date: November 2021<br>
-Version: 1.0<br>
+Version: 1.0
+
+## Installation
+To get this repository on your local server, use the following command:<br>
+    `git clone https://github.com/cappuchinese/databases2.git`
+
+To check if you got the latest version:<br>
+    `git status`
+
+To get the latest version:<br>
+    `git pull`
 
 This directory contains the following files:
 * Tentamen.py
