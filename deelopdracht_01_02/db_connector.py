@@ -63,20 +63,43 @@ class DatabaseConnector:
 
         return student_list
 
-    def get_results_list(self):
+    def get_results_list(self, student):
         """
         Method to get the results of a student and stores it in Tentamen object
+        :param student: name of the student in the table
         :return:
         """
-        query = "SELECT s.naam, c.naam, e.ex_datum, e.cijfer FROM examens e " \
-                "JOIN studenten s ON s.stud_id = e.stud_id " \
-                "JOIN cursussen c ON e.cur_id = c.cur_id;"  # Set the query
-        self.cur.execute(query)  # Execute the query
-        records = self.cur.fetchall()  # Fetch the data
-        objects = [Tentamen(*record) for record in records]  # Put records in a list
+        try:
+            query = "SELECT s.naam, c.naam, e.ex_datum, e.cijfer FROM examens e " \
+                    "JOIN studenten s ON s.stud_id = e.stud_id " \
+                    "JOIN cursussen c ON e.cur_id = c.cur_id " \
+                    f"WHERE s.naam = {student};"  # Set the query
+            self.cur.execute(query)  # Execute the query
+            records = self.cur.fetchall()  # Fetch the data
+            objects = [Tentamen(*record) for record in records]  # Put records in a list
+        except mariadb.OperationalError:
+            print("Operational Error, could not get records on exams.")
+            sys.exit(1)
 
         return objects
 
 
+def main():
+    """
+    Main function of the script
+    :return 0: exit code
+    """
+    connector = DatabaseConnector()  # Initialize class -> connect to database
+    print(connector.get_student_list())  # Print the list of students
+
+    # Ask to get exams from which student
+    student_name = input("Which student do you want to return its results?\n>")
+    exams = connector.get_results_list(student_name)  # Get the exams
+    for exam in exams:
+        print(exam)  # Print the results of each exam
+
+    return 0
+
+
 if __name__ == "__main__":
-    ing = DatabaseConnector()
+    sys.exit(main())

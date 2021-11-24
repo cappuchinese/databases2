@@ -1,8 +1,19 @@
-Databases 2: Deelopdracht 01
-
 Author: Lisa Hu
 Date: November 2021
 Version: 1.0
+
+Databases 2: Deelopdracht 01
+
+Installation
+To get this repository on your local server, use the following command:
+    git clone https://github.com/cappuchinese/databases2.git
+
+To check if you got the latest version:
+    git status
+
+To get the latest version:
+    git pull
+
 
 This directory contains the following files:
 * Tentamen.py
