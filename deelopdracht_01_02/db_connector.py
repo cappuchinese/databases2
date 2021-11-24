@@ -25,7 +25,7 @@ class DatabaseConnector:
 
     def __init__(self):
         self.args = argsparser.dbcon_args()  # Execute the argsparser
-        if len(sys.argv) < 6:  # Check if there are enough arguments
+        if len(sys.argv) < 9:  # Check if there are enough arguments
             print("Insufficient arguments to connect to database, "
                   "my.cnf file will be used for login instead")
             self.cnf_check = True

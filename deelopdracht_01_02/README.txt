@@ -5,14 +5,10 @@ Version: 1.0
 Databases 2: Deelopdracht 01
 
 Installation
-To get this repository on your local server, use the following command:
-    git clone https://github.com/cappuchinese/databases2.git
-
-To check if you got the latest version:
-    git status
-
-To get the latest version:
-    git pull
+    1. Download the .zip
+    2. Unpack in target directory
+    3. Open the 'my.cnf' file and modify the arrow brackets to personal login credentials.
+    4. All setup, the code is runnable via command line.
 
 
 This directory contains the following files:
@@ -20,7 +16,6 @@ This directory contains the following files:
 * db_connector.py
 * my.cnf
 * argsparser.py
-* README.md
 * README.txt
 
 Tentamen.py defines a class "Tentamens" that stores information on a student's exam.

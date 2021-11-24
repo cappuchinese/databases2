@@ -14,6 +14,14 @@ To check if you got the latest version:<br>
 To get the latest version:<br>
     `git pull`
 
+Open the **my.cnf** file and modify the arrow brackets to personal login credentials.
+
+From .zip:
+1. Download the .zip
+2. Unpack in target directory
+3. Open the 'my.cnf' file and modify the arrow brackets to personal login credentials.
+4. All setup, the code is runnable via command line.
+
 This directory contains the following files:
 * Tentamen.py
 * db_connector.py
