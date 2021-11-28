@@ -1,0 +1,11 @@
+id,chromosome,gene_name
+1,1,gene1a
+2,1,gene1b
+3,2,gene2a
+4,2,gene2b
+5,3,gene3a
+6,3,gene3b
+7,4,gene4a
+8,4,gene4b
+9,5,gene5a
+10,5,gene5b
