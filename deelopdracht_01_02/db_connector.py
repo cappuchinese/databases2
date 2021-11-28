@@ -59,7 +59,7 @@ class DatabaseConnector:
         """
         self.cur.execute("SELECT naam FROM studenten;")  # Execute the query
         records = self.cur.fetchall()  # Fetch the data
-        student_list = [name for name in records]  # Put the data in a list
+        student_list = [name[1] for name in records]  # Put the data in a list
 
         return student_list
 

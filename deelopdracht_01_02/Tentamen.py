@@ -47,11 +47,16 @@ class Tentamen:
 
 
 def main(args):
+    """
+    Main function to run script on its own
+    :param args:
+    :return:
+    """
     exam = Tentamen(args.student_name, args.course, args.date, args.grade)
     print(exam)
     return 0
 
 
 if __name__ == "__main__":
-    exitcode = main(argsparser.tentamen_args())
-    sys.exit(exitcode)
+    EXITCODE = main(argsparser.tentamen_args())
+    sys.exit(EXITCODE)
