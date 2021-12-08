@@ -28,7 +28,7 @@ CREATE TABLE chromosomes(
 CREATE TABLE genes(
     id          INT         AUTO_INCREMENT,
     chromosome  INT         NOT NULL,
-    gene_name   MEDIUMTEXT  NOT NULL,
+    gene_name   VARCHAR(30) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (chromosome) REFERENCES chromosomes(id)
 );
@@ -115,10 +115,9 @@ BEGIN
 END -
 
 /*  */
-CREATE PROCEDURE sp_mark_duplicate_oligos(IN oligo_seq varchar(25))
+CREATE PROCEDURE sp_mark_duplicate_oligos(IN oligo_seq char(25))
 BEGIN
-    SET @seq = oligo_seq;
-        UPDATE oligonucleotides SET unique_seq = 1 WHERE sequence = @seq;
+    UPDATE oligonucleotides SET unique_seq = 1 WHERE sequence = oligo_seq;
 END -
 
 /* Set delimiter back to default */
