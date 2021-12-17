@@ -46,7 +46,7 @@ CREATE TABLE oligonucleotides(
     gene        INT         NOT NULL,
     sequence    CHAR(15)    NOT NULL,
     gc_perc     FLOAT       ,
-    melt_temp   FLOAT       ,
+    melt_temp   FLOAT       NOT NULL,
     unique_seq  BOOL        DEFAULT FALSE,
     4_nucs_rep  BOOL        DEFAULT FALSE,
     max_dinucs  BOOL        DEFAULT FALSE,
