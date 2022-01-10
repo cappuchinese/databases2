@@ -1,5 +1,7 @@
 /* Script for week3 assignment 2: Create database according to provided information */
 
+SET foreign_key_checks=0;
+
 /* Drop the tables before creating them */
 DROP TABLE IF EXISTS organisms;
 DROP TABLE IF EXISTS chromosomes;
