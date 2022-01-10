@@ -1,5 +1,7 @@
 /* Script for week3 assignment 2: Create database according to provided information */
 
+SET foreign_key_checks=0;
+
 /* Drop the tables before creating them */
 DROP TABLE IF EXISTS organisms;
 DROP TABLE IF EXISTS chromosomes;
@@ -72,25 +74,25 @@ CREATE TABLE probe(
 );
 
 /* Import the data from the files: Header line is ignored and fields are split by comma */
-LOAD DATA INFILE 'data/organisms.txt'
+LOAD DATA LOCAL INFILE 'data/organisms.txt'
     INTO TABLE organisms
     FIELDS TERMINATED BY ','
     LINES TERMINATED BY '\n'
     IGNORE 1 LINES;
 
-LOAD DATA INFILE 'data/chromosomes.txt'
+LOAD DATA LOCAL INFILE 'data/chromosomes.txt'
     INTO TABLE chromosomes
     FIELDS TERMINATED BY ','
     LINES TERMINATED BY '\n'
     IGNORE 1 LINES;
 
-LOAD DATA INFILE 'data/genes.txt'
+LOAD DATA LOCAL INFILE 'data/genes.txt'
     INTO TABLE genes
     FIELDS TERMINATED BY ','
     LINES TERMINATED BY '\n'
     IGNORE 1 LINES;
 
-LOAD DATA INFILE 'data/oligonucleotides.txt'
+LOAD DATA LOCAL INFILE 'data/oligonucleotides.txt'
     INTO TABLE oligonucleotides
     FIELDS TERMINATED BY ','
     LINES TERMINATED BY '\n'
