@@ -128,5 +128,4 @@ DELIMITER ;
 /* Create indices */
 CREATE UNIQUE INDEX oligo_seq_index ON oligonucleotides(sequence);
 CREATE FULLTEXT INDEX gene_name_index ON gene_identifier(identifier);
-CREATE FULLTEXT INDEX microarray_index ON microarrays(quality);
 CREATE FULLTEXT INDEX organism_index ON organisms(genus, species);
