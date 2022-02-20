@@ -78,31 +78,31 @@ CREATE TABLE probe(
     FOREIGN KEY (microarray) REFERENCES microarrays(id),
     FOREIGN KEY (oligo) REFERENCES oligonucleotides(id)
 );
-#
-# /* Import the data from the files: Header line is ignored and fields are split by comma */
-# LOAD DATA LOCAL INFILE 'data/organisms.txt'
-#     INTO TABLE organisms
-#     FIELDS TERMINATED BY ','
-#     LINES TERMINATED BY '\n'
-#     IGNORE 1 LINES;
-#
-# LOAD DATA LOCAL INFILE 'data/chromosomes.txt'
-#     INTO TABLE chromosomes
-#     FIELDS TERMINATED BY ','
-#     LINES TERMINATED BY '\n'
-#     IGNORE 1 LINES;
-#
-# LOAD DATA LOCAL INFILE 'data/genes.txt'
-#     INTO TABLE genes
-#     FIELDS TERMINATED BY ','
-#     LINES TERMINATED BY '\n'
-#     IGNORE 1 LINES;
-#
-# LOAD DATA LOCAL INFILE 'data/oligonucleotides.txt'
-#     INTO TABLE oligonucleotides
-#     FIELDS TERMINATED BY ','
-#     LINES TERMINATED BY '\n'
-#     IGNORE 1 LINES;
+
+/* Import the data from the files: Header line is ignored and fields are split by comma */
+LOAD DATA LOCAL INFILE 'data/organisms.txt'
+    INTO TABLE organisms
+    FIELDS TERMINATED BY ','
+    LINES TERMINATED BY '\n'
+    IGNORE 1 LINES;
+
+LOAD DATA LOCAL INFILE 'data/chromosomes.txt'
+    INTO TABLE chromosomes
+    FIELDS TERMINATED BY ','
+    LINES TERMINATED BY '\n'
+    IGNORE 1 LINES;
+
+LOAD DATA LOCAL INFILE 'data/genes.txt'
+    INTO TABLE genes
+    FIELDS TERMINATED BY ','
+    LINES TERMINATED BY '\n'
+    IGNORE 1 LINES;
+
+LOAD DATA LOCAL INFILE 'data/oligonucleotides.txt'
+    INTO TABLE oligonucleotides
+    FIELDS TERMINATED BY ','
+    LINES TERMINATED BY '\n'
+    IGNORE 1 LINES;
 
 /* Create stored procedure */
 /* Set delimiter to dash for readability */
