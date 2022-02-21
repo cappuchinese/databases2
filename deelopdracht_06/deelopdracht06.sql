@@ -92,6 +92,12 @@ LOAD DATA LOCAL INFILE 'data/chromosomes.txt'
     LINES TERMINATED BY '\n'
     IGNORE 1 LINES;
 
+LOAD DATA LOCAL INFILE 'data/identifiers.txt'
+    INTO TABLE gene_identifier
+    FIELDS TERMINATED BY ','
+    LINES TERMINATED BY '\n'
+    IGNORE 1 LINES;
+
 LOAD DATA LOCAL INFILE 'data/genes.txt'
     INTO TABLE genes
     FIELDS TERMINATED BY ','
@@ -100,6 +106,18 @@ LOAD DATA LOCAL INFILE 'data/genes.txt'
 
 LOAD DATA LOCAL INFILE 'data/oligonucleotides.txt'
     INTO TABLE oligonucleotides
+    FIELDS TERMINATED BY ','
+    LINES TERMINATED BY '\n'
+    IGNORE 1 LINES;
+
+LOAD DATA LOCAL INFILE 'data/microarrays.txt'
+    INTO TABLE microarrays
+    FIELDS TERMINATED BY ','
+    LINES TERMINATED BY '\n'
+    IGNORE 1 LINES;
+
+LOAD DATA LOCAL INFILE 'data/probes.txt'
+    INTO TABLE probe
     FIELDS TERMINATED BY ','
     LINES TERMINATED BY '\n'
     IGNORE 1 LINES;
