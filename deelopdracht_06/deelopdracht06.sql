@@ -16,6 +16,7 @@ DROP PROCEDURE IF EXISTS sp_mark_duplicate_oligos;
 DROP PROCEDURE IF EXISTS sp_get_oligos_by_tm;
 DROP PROCEDURE IF EXISTS sp_get_matrices_by_quality;
 DROP PROCEDURE IF EXISTS sp_create_probe;
+DROP PROCEDURE IF EXISTS sp_create_matrix;
 
 /* Create the tables */
 CREATE TABLE organisms(
@@ -65,8 +66,8 @@ CREATE TABLE oligonucleotides(
 
 CREATE TABLE microarrays(
     id          INT         AUTO_INCREMENT,
-    incub_temp  FLOAT       NOT NULL,
-    quality     FLOAT       NOT NULL,
+    incub_temp  FLOAT       ,
+    quality     FLOAT       ,
     PRIMARY KEY (id)
 );
 
@@ -124,7 +125,7 @@ LOAD DATA LOCAL INFILE 'data/probes.txt'
 
 /* Create stored procedure */
 /* Set delimiter to dash for readability */
-DELIMITER -
+DELIMITER //
 
 /* Procedure using SELECT to get the gene name, identifiers and sequence */
 CREATE PROCEDURE sp_get_genes()
@@ -132,13 +133,13 @@ BEGIN
     SELECT g.gene_name, gi.identifier, o.sequence FROM gene_identifier gi
         JOIN genes g ON g.id = gi.gene
         JOIN oligonucleotides o on g.id = o.gene;
-END -
+END //
 
 /* Procedure gives amount of different melting temperature divided by the number of oligonucleotides */
 CREATE PROCEDURE sp_get_tm_vs_probes()
 BEGIN
     SELECT COUNT(DISTINCT melt_temp)/COUNT(id) FROM oligonucleotides;
-END -
+END //
 
 /* Procedure to mark every duplicate sequence entry in oligonucleotides */
 CREATE PROCEDURE sp_mark_duplicate_oligos()
@@ -150,9 +151,9 @@ BEGIN
                                                            GROUP BY sequence
                                                            HAVING COUNT(sequence)<2) AS cnt
                                                      ON o.sequence = cnt.sequence);
-END -
+END //
 
-/* Procedure to show oligo id's between a min and max */
+/* Procedure to show oligo IDs between a min and max */
 CREATE PROCEDURE sp_get_oligos_by_tm(IN min FLOAT, IN max FLOAT)
     BEGIN
         /* Set variables and query*/
@@ -173,21 +174,21 @@ CREATE PROCEDURE sp_get_oligos_by_tm(IN min FLOAT, IN max FLOAT)
         EXECUTE QUERY USING @min, @max;
 
         SELECT * FROM oligo_ids;
-    END -
+    END //
 
 /* Procedure to show matrices ordered by genes without probes*/
 CREATE PROCEDURE sp_get_matrices_by_quality()
     BEGIN
         SELECT m.id, m.quality, m.incub_temp,
-        (SELECT MAX(id) FROM genes g) - COUNT(DISTINCT g.id) AS 'probeless_gene',
+        (SELECT MAX(id) FROM genes g) - COUNT(DISTINCT (g.id)) AS 'probeless_gene',
         COUNT(DISTINCT p.id) / COUNT(DISTINCT g.id) AS 'average_probes_per_gene'
         FROM genes g JOIN oligonucleotides o ON g.id = o.gene
         JOIN probe p ON o.id = p.oligo
         JOIN microarrays m ON p.microarray = m.id
         GROUP BY m.id ORDER BY probeless_gene, average_probes_per_gene DESC;
-    END -
+    END //
 
-/* Procedure to create a new probe*/
+/* Procedure to create a new probe */
 CREATE PROCEDURE sp_create_probe(IN matrix_id INT, IN oligo_id INT)
     BEGIN
         SET @matrix_id = matrix_id;
@@ -196,7 +197,46 @@ CREATE PROCEDURE sp_create_probe(IN matrix_id INT, IN oligo_id INT)
 
         PREPARE QUERY FROM  @query;
         EXECUTE QUERY USING @matrix_id, @oligo_id;
-    END -
+    END //
+
+/* Procesure to create a matrix */
+CREATE PROCEDURE sp_create_matrix(IN melting_t FLOAT, IN max_difference FLOAT)
+    BEGIN
+        DECLARE done INT DEFAULT FALSE;
+        /* Variables for inserting probe table */
+        DECLARE mi_array INT;
+        DECLARE oligo_id INT;
+        /* Cursor for getting the oligo IDs */
+        DECLARE probe_cur CURSOR FOR SELECT * from oligonucleotides;
+        /* Continue handler */
+        DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+        /* Setting variables with input for getting oligos */
+        SET @min = melting_t - max_difference;
+        SET @max = melting_t + max_difference;
+
+        /* Create a new empty microarray */
+        INSERT INTO microarrays(incub_temp, quality) VALUES (NULL ,NULL);
+        /* Store the ID of the newly created microarray */
+        SELECT LAST_INSERT_ID() INTO mi_array;
+        /* Get the oligos using earlier created procedure, stored in the cursor*/
+        CALL sp_get_oligos_by_tm(@min, @max);
+
+        OPEN probe_cur;
+        read_loop: LOOP
+            /* Store the oligo ID in the declared oligo variable */
+            FETCH probe_cur INTO oligo_id;
+            /* Insert the new microarray and oligo into probe table */
+            INSERT INTO probe(microarray, oligo) VALUES (mi_array, oligo_id);
+
+            /* End loop */
+            IF done THEN
+                LEAVE read_loop;
+            END IF;
+
+        END LOOP;
+        CLOSE probe_cur;
+    END //
 
 /* Set delimiter back to default */
 DELIMITER ;
