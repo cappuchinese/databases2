@@ -25,47 +25,48 @@ class DatabaseConnector:
         """
         Initializing the database connection
         """
-        self.__conn, self.__cur = self.__connect()
-
-    @staticmethod
-    def __connect():
-        """
-        Connection method
-        :return: Database connector and cursor
-        """
         try:
-            connector = mariadb.connect(default_file="my.cnf")
-            cursor = connector.cursor()
+            __conn = mariadb.connect(default_file="my.cnf")
+            self.__cur = __conn.cursor()
             print("Connected to database")
-            return connector, cursor
 
         except mariadb.Error as err:
-            print(f"Error with database:\n{err}")
-            sys.exit(1)
+            sys.exit(err)
 
     def sp_get_genes(self):
         """
         Method to call the sp_get_genes procedure
         :return:
         """
-        result = self.__cur.callproc('sp_get_genes')
-        return result
+        try:
+            self.__cur.callproc('sp_get_genes')
+            result = self.__cur.fetchall()
+            return result
+        except mariadb.Error as err:
+            sys.exit(err)
 
     def sp_get_tm_vs_probes(self):
         """
         Method to call the sp_get_tm_vs_probes procedure
         :return:
         """
-        result = self.__cur.callproc('sp_get_tm_vs_probes')
-        return result
+        try:
+            self.__cur.callproc('sp_get_tm_vs_probes')
+            result = self.__cur.fetchall()
+            return result
+        except mariadb.Error as err:
+            sys.exit(err)
 
     def sp_mark_duplicate_oligos(self):
         """
         Method to call the sp_mark_duplicate_oligos procedure
         :return:
         """
-        result = self.__cur.callproc('sp_mark_duplicate_oligos')
-        return result
+        try:
+            self.__cur.callproc('sp_mark_duplicate_oligos')
+            print("Finished marking duplicates")
+        except mariadb.Error as err:
+            sys.exit(err)
 
     def sp_get_oligos_by_tm(self, min_tmp, max_tmp):
         """
@@ -74,16 +75,30 @@ class DatabaseConnector:
         :param max_tmp: Maximum temperature of the oligos
         :return:
         """
-        result = self.__cur.callproc('sp_get_oligos_by_tm', (min_tmp, max_tmp))
-        return result
+        result_list = []
+        try:
+            self.__cur.callproc('sp_get_oligos_by_tm', (min_tmp, max_tmp))
+            result = self.__cur.fetchall()
+            for item in result:
+                result_list.append(item)
+            return result_list
+        except mariadb.Error as err:
+            sys.exit(err)
 
     def sp_get_matrices_by_quality(self):
         """
         Method to call sp_get_matrices_by_quality procedure: Show matrices by genes without probes
         :return:
         """
-        result = self.__cur.callproc('sp_get_matrices_by_quality')
-        return result
+        result_list = []
+        try:
+            self.__cur.callproc('sp_get_matrices_by_quality')
+            result = self.__cur.fetchall()
+            for item in result:
+                result_list.append(item)
+            return result_list
+        except mariadb.Error as err:
+            sys.exit(err)
 
     def sp_create_probe(self, matrix_id, oligo_id):
         """
@@ -92,5 +107,26 @@ class DatabaseConnector:
         :param oligo_id: ID of the oligo
         :return:
         """
-        result = self.__cur.callproc('sp_create_probe', (matrix_id, oligo_id))
-        return result
+        result_list = []
+        try:
+            self.__cur.callproc('sp_create_probe', (matrix_id, oligo_id))
+            result = self.__cur.fetchall()
+            for item in result:
+                result_list.append(item)
+        except mariadb.Error as err:
+            sys.exit(err)
+
+    def sp_create_matrix(self, melting_temp: int, difference: int):
+        """
+        Method to call sp_create_matrix procedure: Create matrix for probes between given temps
+        :param melting_temp: Melting temperature
+        :param difference: Marge of the temperature
+        :return:
+        """
+        try:
+            self.__cur.callproc('sp_create_matrix', (melting_temp, difference))
+            min_tmp = melting_temp - difference
+            max_tmp = melting_temp + difference
+            print(f"Created a new matrix with probes between {min_tmp} and {max_tmp}")
+        except mariadb.Error as err:
+            sys.exit(err)

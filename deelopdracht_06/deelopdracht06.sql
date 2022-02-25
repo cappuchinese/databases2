@@ -207,7 +207,7 @@ CREATE PROCEDURE sp_create_matrix(IN melting_t FLOAT, IN max_difference FLOAT)
         DECLARE mi_array INT;
         DECLARE oligo_id INT;
         /* Cursor for getting the oligo IDs */
-        DECLARE probe_cur CURSOR FOR SELECT * from oligonucleotides;
+        DECLARE probe_cur CURSOR FOR SELECT * from oligo_ids;
         /* Continue handler */
         DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
