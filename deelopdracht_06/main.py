@@ -130,3 +130,60 @@ class DatabaseConnector:
             print(f"Created a new matrix with probes between {min_tmp} and {max_tmp}")
         except mariadb.Error as err:
             sys.exit(err)
+
+
+def main():
+    """
+    Main run
+    :return:
+    """
+    # Arguemnts
+    parser = argparse.ArgumentParser(description="Connect to database to control the procedures")
+    parser.add_argument("-g", "--sp_get_genes", action="store_true", dest="get_genes",
+                        help="Get a list of all the genes")
+    parser.add_argument("-to", "sp_get_tm_vs_oligos", action="store_true", dest="tm_oligo",
+                        help="The different melting temps divided by oligonucleotides")
+    parser.add_argument("-d", "--sp_mark_duplicate_oligos", action="store_true", dest="duplicates",
+                        help="Mark all the duplicate oligos")
+    parser.add_argument("-ot", "--sp_get_oligos_by_tm", dest="oligos_by_tmp", nargs=2,
+                        help="Get the oligonucleotides within the given temperatures")
+    parser.add_argument("-mq", "--sp_get_matrices_by_quality", action="store_true", dest="mat_qual",
+                        help="Show matrices ordered by genes without probes")
+    parser.add_argument("-cp", "--sp_create_probe", nargs=2, dest="probe",
+                        help="Create a new probe")
+    parser.add_argument("-cm", "--sp_create_matrix", nargs=2, dest="matrix",
+                        help="Create matrix for probes between given temperatures")
+
+    # Parse arguments
+    args = parser.parse_args()
+    # Initialize connection
+    db_mod = DatabaseConnector()
+
+    # Return wanted results
+    if args.get_genes:
+        genes = db_mod.sp_get_genes()
+        # Output formatting
+        for row in genes:
+            print(f"Gene: {row[0]}, identifier: {row[1]}, seq: {row[2]}")
+    elif args.tm_oligo:
+        temps = db_mod.sp_get_tm_vs_probes()
+        print(f"Amount of unique melting point per oligo: {temps}")
+    elif args.duplicates:
+        db_mod.sp_mark_duplicate_oligos()
+    elif args.oligos_by_tmp:
+        print(db_mod.sp_get_oligos_by_tm(args.oligos_by_tmp[0], args.oligos_by_tmp[1]))
+    elif args.mat_qual:
+        print(db_mod.sp_get_matrices_by_quality())
+    elif args.probe:
+        print(db_mod.sp_create_probe(args.probe[0], args.probe[1]))
+    elif args.matrix:
+        db_mod.sp_create_matrix(args.matrix[0], args.matrix[1])
+    else:
+        sys.exit("Choose a procesure to execute. Exiting program...")
+
+    return 0
+
+
+if __name__ == '__main__':
+    EXITCODE = main()
+    sys.exit(EXITCODE)
