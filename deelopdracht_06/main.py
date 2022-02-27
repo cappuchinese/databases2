@@ -5,8 +5,7 @@ Module DatabaseConnector:
     A class that connects the user to the database.
     Also contains methods to get the list of students and a list of results.
     Usage:
-        python3 db_connector.py -h <host> -u <user> -d <database> -p
-        If there are insufficient arguments given, the my.cnf file will be used by default.
+        python3 main.py <procedure arguments>
 """
 
 __author__ = "Lisa Hu"
@@ -41,7 +40,10 @@ class DatabaseConnector:
         try:
             self.__cur.callproc('sp_get_genes')
             result = self.__cur.fetchall()
-            return result
+            # for results in self.__cur.stored_results():
+            #     result = results.fetchall()
+            for row in result:
+                print(f"Gene: {row[0]}, identifier: {row[1]}, seq: {row[2]}")
         except mariadb.Error as err:
             sys.exit(err)
 
@@ -161,10 +163,7 @@ def main():
 
     # Return wanted results
     if args.get_genes:
-        genes = db_mod.sp_get_genes()
-        # Output formatting
-        for row in genes:
-            print(f"Gene: {row[0]}, identifier: {row[1]}, seq: {row[2]}")
+        db_mod.sp_get_genes()
     elif args.tm_oligo:
         temps = db_mod.sp_get_tm_vs_probes()
         print(f"Amount of unique melting point per oligo: {temps}")

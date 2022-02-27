@@ -180,7 +180,7 @@ CREATE PROCEDURE sp_get_oligos_by_tm(IN min FLOAT, IN max FLOAT)
 CREATE PROCEDURE sp_get_matrices_by_quality()
     BEGIN
         SELECT m.id, m.quality, m.incub_temp,
-        (SELECT MAX(id) FROM genes g) - COUNT(DISTINCT (g.id)) AS 'probeless_gene',
+        (SELECT MAX(id) FROM genes g) - COUNT(DISTINCT (g.chromosome)) AS 'probeless_gene',
         COUNT(DISTINCT p.id) / COUNT(DISTINCT g.id) AS 'average_probes_per_gene'
         FROM genes g JOIN oligonucleotides o ON g.id = o.gene
         JOIN probe p ON o.id = p.oligo
