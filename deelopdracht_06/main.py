@@ -141,7 +141,7 @@ def main():
     parser = argparse.ArgumentParser(description="Connect to database to control the procedures")
     parser.add_argument("-g", "--sp_get_genes", action="store_true", dest="get_genes",
                         help="Get a list of all the genes")
-    parser.add_argument("-to", "sp_get_tm_vs_oligos", action="store_true", dest="tm_oligo",
+    parser.add_argument("-to", "--sp_get_tm_vs_oligos", action="store_true", dest="tm_oligo",
                         help="The different melting temps divided by oligonucleotides")
     parser.add_argument("-d", "--sp_mark_duplicate_oligos", action="store_true", dest="duplicates",
                         help="Mark all the duplicate oligos")
