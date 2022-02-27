@@ -153,7 +153,7 @@ def main():
                         help="Show matrices ordered by genes without probes")
     parser.add_argument("-cp", "--sp_create_probe", nargs=2, dest="probe",
                         help="Create a new probe")
-    parser.add_argument("-cm", "--sp_create_matrix", nargs=2, dest="matrix",
+    parser.add_argument("-cm", "--sp_create_matrix", nargs=2, dest="matrix", type=int,
                         help="Create matrix for probes between given temperatures")
 
     # Parse arguments
